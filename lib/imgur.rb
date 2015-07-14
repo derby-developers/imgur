@@ -5,7 +5,7 @@ require 'net/http'
 module Imgur
 
   HTML_PATH = 'https://imgur.com/'
-  API_PATH = 'https://api.imgur.com/3/'
+  API_PATH = 'https://imgur-apiv3.p.mashape.com/3/' #'https://api.imgur.com/3/'
   UPLOAD_PATH = 'upload'
   IMAGE_PATH = 'image/'
   ALBUM_GET_PATH = 'album/'
@@ -13,10 +13,11 @@ module Imgur
   ACCOUNT_PATH = 'account/'
 
   class Client
-    attr_accessor :client_id
+    attr_accessor :client_id, :mashape_key
 
-    def initialize(client_id)
+    def initialize(client_id, mashape_key)
       @client_id = client_id
+      @mashape_key = mashape_key
     end
 
     def post(url, body={})
@@ -99,7 +100,7 @@ module Imgur
     end
 
     def auth_header
-      {'Authorization' => 'Client-ID ' + @client_id}
+      {'Authorization' => 'Client-ID ' + @client_id, 'X-Mashape-Key' => @mashape_key}
     end
 
   end
@@ -271,8 +272,8 @@ module Imgur
     end
   end
 
-  def self.new(client_id)
-    Client.new client_id
+  def self.new(client_id, mashape_key)
+    Client.new client_id, mashape_key
   end
 
 end
